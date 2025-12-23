@@ -3,142 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SYSTEM OFFLINE | MURUGAN</title>
+    <title>Murugan | Under Maintenance</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Space+Mono&display=swap');
-
-        :root {
-            --primary: #ff416c;
-            --accent: #00f2fe;
-            --dark: #0a0a12;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body, html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+            background-color: #1a1a1a; /* Dark fallback */
+        }
 
-        body {
-            background-color: var(--dark);
-            color: white;
-            font-family: 'Orbitron', sans-serif;
+        /* Slideshow Container */
+        #bg-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+            filter: brightness(0.5); /* Makes text pop */
+        }
+
+        .active {
+            opacity: 1;
+        }
+
+        /* Content Styling */
+        .content {
             height: 100vh;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            overflow: hidden;
-        }
-
-        /* Animated Background Grid */
-        .grid {
-            position: absolute;
-            inset: 0;
-            background-image: 
-                linear-gradient(to right, rgba(255, 65, 108, 0.05) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(0, 242, 254, 0.05) 1px, transparent 1px);
-            background-size: 50px 50px;
-            transform: perspective(500px) rotateX(45deg);
-            transform-origin: center;
-            animation: moveGrid 10s linear infinite;
-            z-index: 1;
-        }
-
-        @keyframes moveGrid {
-            from { background-position: 0 0; }
-            to { background-position: 0 500px; }
-        }
-
-        .content {
-            position: relative;
-            z-index: 10;
+            align-items: center;
             text-align: center;
+            color: #ffffff;
             padding: 20px;
         }
 
-        /* Glitch Effect Title */
         h1 {
-            font-size: clamp(3rem, 10vw, 6rem);
+            font-size: clamp(3rem, 10vw, 6rem); /* Big and Bold */
             font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 5px;
-            position: relative;
-            color: white;
-            text-shadow: 2px 2px var(--primary), -2px -2px var(--accent);
-            animation: glitch 1s infinite;
+            letter-spacing: 12px;
+            margin-bottom: 15px;
+            opacity: 0;
+            animation: dropFade 1.2s ease-out forwards;
         }
 
-        @keyframes glitch {
-            0% { transform: translate(0); }
-            20% { transform: translate(-3px, 3px); }
-            40% { transform: translate(-3px, -3px); }
-            60% { transform: translate(3px, 3px); }
-            80% { transform: translate(3px, -3px); }
-            100% { transform: translate(0); }
+        p {
+            font-size: clamp(1rem, 4vw, 1.5rem);
+            font-weight: 300;
+            letter-spacing: 2px;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: slideInLeft 1s ease-out 0.8s forwards;
         }
 
-        /* Terminal Text */
-        .status-box {
-            font-family: 'Space Mono', monospace;
-            background: rgba(0, 0, 0, 0.8);
-            border: 1px solid var(--accent);
-            padding: 20px;
-            border-radius: 5px;
-            margin-top: 30px;
-            display: inline-block;
-            text-align: left;
-            box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+        .footer-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            letter-spacing: 6px;
+            text-transform: uppercase;
+            opacity: 0;
+            padding-top: 20px;
+            border-top: 2px solid rgba(255,255,255,0.3);
+            animation: growIn 1s ease-out 1.5s forwards;
         }
 
-        .line {
-            display: block;
-            margin-bottom: 5px;
-            font-size: 0.9rem;
-            color: var(--accent);
+        /* Animations */
+        @keyframes dropFade {
+            0% { transform: translateY(-40px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
         }
 
-        .line::before { content: "> "; color: var(--primary); }
-
-        .cursor {
-            display: inline-block;
-            width: 10px;
-            height: 1.2rem;
-            background: var(--accent);
-            animation: blink 0.8s infinite;
-            vertical-align: middle;
+        @keyframes slideInLeft {
+            0% { transform: translateX(-50px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
         }
 
-        @keyframes blink { 50% { opacity: 0; } }
-
-        /* Floating Neon Circles */
-        .circle {
-            position: absolute;
-            border-radius: 50%;
-            background: var(--primary);
-            filter: blur(80px);
-            opacity: 0.3;
-            z-index: 2;
-            animation: float 6s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-20px) scale(1.1); }
+        @keyframes growIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
         }
     </style>
 </head>
 <body>
 
-    <div class="grid"></div>
-    <div class="circle" style="width: 300px; height: 300px; top: -100px; right: -50px; background: var(--accent);"></div>
-    <div class="circle" style="width: 250px; height: 250px; bottom: -50px; left: -50px;"></div>
-
-    <div class="content">
-        <h1>OFFLINE</h1>
-        <div class="status-box">
-            <span class="line">Initializing database upgrade...</span>
-            <span class="line">Deploying new security protocols...</span>
-            <span class="line">Syncing unique usernames...</span>
-            <span class="line">Status: <span style="color: #00ff00;">MAINTENANCE_MODE</span></span>
-            <span class="line">Estimated return: SOON <span class="cursor"></span></span>
-        </div>
+    <div id="bg-container">
+        <div class="slide active" style="background-image: url('https://source.unsplash.com/1920x1080/?nature,forest')"></div>
+        <div class="slide" style="background-image: url('https://source.unsplash.com/1920x1080/?mountain,calm')"></div>
+        <div class="slide" style="background-image: url('https://source.unsplash.com/1920x1080/?ocean,peaceful')"></div>
     </div>
 
+    <div class="content">
+        <h1>UNDER MAINTENANCE</h1>
+        <p>We are deeply sorry for the inconvenience, we'll be back soon.</p>
+        <div class="footer-name">BY MURUGAN</div>
+    </div>
+
+    <script>
+        const slides = document.querySelectorAll('.slide');
+        let index = 0;
+
+        function changeBackground() {
+            slides[index].classList.remove('active');
+            index = (index + 1) % slides.length;
+            slides[index].classList.add('active');
+        }
+
+        // Change every 6 seconds for a calm feel
+        setInterval(changeBackground, 6000);
+    </script>
 </body>
 </html>
