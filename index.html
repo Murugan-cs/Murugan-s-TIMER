@@ -30,71 +30,86 @@
         .logo { font-size: 1.3rem; font-weight: 800; color: var(--accent); letter-spacing: 1px; }
         .nav-box { background: var(--primary); color: white; border: none; padding: 10px 18px; border-radius: 12px; cursor: pointer; font-size: 0.85rem; font-weight: 600; margin-left: 8px; }
 
-        #loginOverlay { position: fixed; inset: 0; background: var(--dark); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
-        .auth-card { background: white; padding: 30px; border-radius: 25px; width: 100%; max-width: 400px; text-align: center; color: #111; }
-        .auth-input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1px solid #ddd; }
+        /* AUTH OVERLAYS */
+        #loginOverlay, #usernameOverlay { position: fixed; inset: 0; background: var(--dark); z-index: 5000; display: none; align-items: center; justify-content: center; padding: 20px; }
+        .auth-card { background: white; padding: 30px; border-radius: 25px; width: 100%; max-width: 400px; text-align: center; color: #111; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        .auth-input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 12px; border: 1px solid #ddd; outline: none; }
+        .auth-input:focus { border-color: var(--primary); }
 
-        /* Online Users UI */
-        #onlineUsers { width: 100%; display: flex; gap: 10px; overflow-x: auto; padding: 10px 0; margin-bottom: 20px; }
-        .user-pill { background: var(--glass); padding: 8px 15px; border-radius: 20px; font-size: 0.8rem; cursor: pointer; border: 1px solid var(--accent); display: flex; align-items: center; white-space: nowrap; }
-        .status-dot { width: 8px; height: 8px; background: #00ff88; border-radius: 50%; margin-right: 8px; }
-
-        /* Chat Window Updates */
+        /* CHAT BOX */
         #chatToggle { position: fixed; bottom: 20px; right: 20px; width: 65px; height: 65px; background: var(--dark); border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 2000; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
-        #chatWindow { position: fixed; bottom: 95px; right: 20px; width: min(380px, 90vw); height: 500px; max-height: 70vh; background: var(--glass); border-radius: 25px; display: none; flex-direction: column; z-index: 1999; box-shadow: 0 25px 60px rgba(0,0,0,0.5); overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
-        .message-bubble { padding: 10px; border-radius: 12px; max-width: 85%; font-size: 0.9rem; }
-        .msg-me { align-self: flex-end; background: var(--primary); color: white; }
-        .msg-them { align-self: flex-start; background: white; color: #333; border: 1px solid #eee; }
+        #chatWindow { position: fixed; bottom: 95px; right: 20px; width: min(380px, 90vw); height: 550px; max-height: 80vh; background: var(--glass); border-radius: 25px; display: none; flex-direction: column; z-index: 1999; box-shadow: 0 25px 60px rgba(0,0,0,0.5); overflow: hidden; border: 1px solid rgba(255,255,255,0.2); }
+        #chatMessages { flex: 1; overflow-y: auto; padding: 15px; display: flex; flex-direction: column; gap: 10px; background: #f0f2f5; }
+        .message-bubble { padding: 10px 14px; border-radius: 18px; max-width: 80%; font-size: 0.9rem; position: relative; line-height: 1.4; }
+        .msg-me { align-self: flex-end; background: var(--primary); color: white; border-bottom-right-radius: 4px; }
+        .msg-them { align-self: flex-start; background: white; color: #333; border-bottom-left-radius: 4px; border: 1px solid #ddd; }
+        .emoji-bar { padding: 8px; background: #eee; display: flex; gap: 12px; font-size: 1.3rem; border-top: 1px solid #ddd; }
+        .emoji-bar span { cursor: pointer; transition: transform 0.1s; }
+        .emoji-bar span:hover { transform: scale(1.3); }
 
-        section { display: none; width: 100%; max-width: 900px; text-align: center; }
-        section.active { display: flex; flex-direction: column; align-items: center; }
-        .container { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px; }
+        /* ONLINE STATUS */
+        #onlineUsers { width: 100%; display: flex; gap: 10px; overflow-x: auto; padding: 15px 5%; margin-top: 10px; }
+        .user-pill { background: var(--glass); padding: 8px 15px; border-radius: 25px; font-size: 0.8rem; cursor: pointer; border: 1px solid var(--accent); display: flex; align-items: center; white-space: nowrap; font-weight: bold; }
+        .status-dot { width: 8px; height: 8px; background: #00ff88; border-radius: 50%; margin-right: 8px; box-shadow: 0 0 5px #00ff88; }
+
+        section { display: none; width: 100%; max-width: 900px; text-align: center; padding: 20px; margin: auto; }
+        section.active { display: flex; flex-direction: column; align-items: center; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        textarea { width: 100%; padding: 15px; border-radius: 15px; border: 1px solid #ddd; margin-bottom: 10px; resize: none; }
     </style>
 </head>
 <body>
 
     <div id="loginOverlay">
         <div class="auth-card">
-            <h2>Network Sign In</h2>
-            <input type="email" id="emailIn" class="auth-input" placeholder="Email">
+            <h2 style="margin-bottom: 10px;">Murugan Network</h2>
+            <input type="email" id="emailIn" class="auth-input" placeholder="Email Address">
             <input type="password" id="passIn" class="auth-input" placeholder="Password">
-            <button class="nav-box" style="width:100%; margin-top:10px;" onclick="handleAuth('login')">LOGIN</button>
-            <button class="nav-box" style="width:100%; background:#4285F4; margin-top:10px;" onclick="handleAuth('google')">GOOGLE LOGIN</button>
-            <p onclick="handleAuth('signup')" style="margin-top:15px; cursor:pointer; font-size:0.8rem; color:var(--primary);">Don't have an account? Sign Up</p>
+            <button class="nav-box" style="width:100%; margin: 10px 0;" onclick="handleAuth('login')">LOGIN / SIGN UP</button>
+            <div style="margin: 10px 0; color: #888; font-size: 0.8rem;">OR</div>
+            <button class="nav-box" style="width:100%; background:#4285F4;" onclick="handleAuth('google')">SIGN IN WITH GOOGLE</button>
+        </div>
+    </div>
+
+    <div id="usernameOverlay">
+        <div class="auth-card">
+            <h2 style="color:var(--dark)">Create Username</h2>
+            <p style="font-size:0.8rem; color:#666; margin-bottom:15px;">Choose a name for the network.</p>
+            <input type="text" id="newUsername" class="auth-input" placeholder="Username..." oninput="checkUsernameAvailability(this.value)">
+            <p id="usernameHint" style="font-size:0.75rem; margin-top:5px; font-weight:bold;"></p>
+            <button id="finishSetupBtn" class="nav-box" style="width:100%; margin-top:20px; opacity:0.5;" disabled onclick="finalizeUsername()">CONFIRM NAME</button>
+            <p style="color:var(--secondary); font-size:0.7rem; margin-top:15px; font-weight:bold;">⚠️ WARNING: This username is permanent and cannot be changed!</p>
         </div>
     </div>
 
     <nav>
-        <div class="logo">MURUGAN NETWORK</div>
-        <div class="nav-box-group">
+        <div class="logo">MURUGAN</div>
+        <div style="display:flex; align-items:center;">
             <button class="nav-box" onclick="showSection('home')">HOME</button>
-            <button class="nav-box" onclick="showSection('timer')">TIMER</button>
             <button class="nav-box" onclick="showSection('tasks')">TASKS</button>
-            <button class="nav-box" style="background:#555" onclick="firebase.auth().signOut()">OUT</button>
+            <div id="userProfile" style="display:flex; align-items:center; gap:8px; margin-left:15px; background:rgba(255,255,255,0.1); padding:6px 12px; border-radius:12px;">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                <span id="navUsername" style="font-weight:bold; font-size:0.8rem;">...</span>
+            </div>
+            <button class="nav-box" style="background:#444;" onclick="auth.signOut()">OFF</button>
         </div>
     </nav>
 
+    <div id="onlineUsers"></div>
+
     <div class="container">
-        <div id="onlineUsers"></div>
-
         <section id="home" class="active">
-            <h1 style="color:white; margin-top:40px;">THE FUTURE BELONGS<br>TO THE FOCUSED.</h1>
-        </section>
-
-        <section id="timer">
-            <div style="display:flex; gap:10px; margin-top:50px;">
-                <div style="background:white; padding:20px; border-radius:20px;"><h2 id="mBox">25</h2></div>
-                <div style="background:white; padding:20px; border-radius:20px;"><h2 id="sBox">00</h2></div>
-            </div>
-            <button class="nav-box" style="margin-top:20px; padding:15px 40px;" onclick="toggleTimer()">START</button>
+            <h1 style="color:white; font-size: 3rem; margin-top: 50px;">FOCUS ON<br>YOUR GOALS.</h1>
+            <p style="color:rgba(255,255,255,0.8); margin-top: 20px;">Welcome to the permanent network.</p>
         </section>
 
         <section id="tasks">
-            <div style="background:var(--glass); padding:20px; border-radius:25px; width:100%; text-align:left;">
-                <h2>Task Board</h2>
-                <textarea id="taskInput" placeholder="What's your goal?"></textarea>
-                <button class="nav-box" style="width:100%;" onclick="postTask()">POST TASK</button>
-                <div id="taskList" style="margin-top:20px;"></div>
+            <div style="background:var(--glass); padding:30px; border-radius:25px; width:100%; text-align:left;">
+                <h2 style="margin-bottom:15px;">Priority Tasks</h2>
+                <textarea id="taskInput" placeholder="What are you working on?" rows="3"></textarea>
+                <button class="nav-box" style="width:100%;" onclick="postTask()">POST OBJECTIVE</button>
+                <div id="taskList" style="margin-top:25px;"></div>
             </div>
         </section>
     </div>
@@ -106,19 +121,25 @@
     <div id="chatWindow">
         <div style="background:var(--dark); color:var(--accent); padding:15px; display:flex; justify-content:space-between; align-items:center;">
             <div style="display:flex; align-items:center; gap:8px;">
-                <button id="backToGlobal" onclick="loadChat('global')" style="display:none; background:none; border:1px solid white; color:white; padding:2px 5px; cursor:pointer;">←</button>
+                <button id="backBtn" onclick="loadChat('global')" style="display:none; background:none; border:1px solid white; color:white; padding:2px 5px; border-radius:5px;">←</button>
                 <b id="chatTitle">GLOBAL CHAT</b>
             </div>
-            <button onclick="toggleChat()" style="background:none; border:none; color:white; font-size:1.2rem;">&times;</button>
+            <button onclick="toggleChat()" style="background:none; border:none; color:white; font-size:1.5rem;">&times;</button>
         </div>
-        <div id="chatMessages" style="flex:1; overflow-y:auto; padding:15px; display:flex; flex-direction:column; gap:10px;"></div>
-        <div style="padding:10px; background:white;">
-            <input id="chatInput" placeholder="Message..." style="width:100%; padding:10px; border-radius:10px; border:1px solid #ddd;">
-            <button onclick="sendChatMessage()" style="width:100%; background:var(--primary); color:white; border:none; padding:10px; border-radius:10px; margin-top:5px; font-weight:bold;">SEND</button>
+        <div id="chatMessages"></div>
+        <div class="emoji-bar">
+            <span onclick="addEmoji('🔥')">🔥</span><span onclick="addEmoji('✅')">✅</span>
+            <span onclick="addEmoji('🚀')">🚀</span><span onclick="addEmoji('😂')">😂</span>
+            <span onclick="addEmoji('❤️')">❤️</span><span onclick="addEmoji('✨')">✨</span>
+        </div>
+        <div style="padding:15px; background:white; display:flex; gap:8px;">
+            <input id="chatInput" placeholder="Type a message..." style="flex:1; padding:12px; border-radius:12px; border:1px solid #ddd;">
+            <button onclick="sendChatMessage()" style="background:var(--primary); color:white; border:none; padding:12px 20px; border-radius:12px; font-weight:bold;">SEND</button>
         </div>
     </div>
 
     <script>
+        // 1. FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyBG9BMREdoTTYpVqNOH_SgrAFrDZw18aTc",
             authDomain: "murugan-s-network.firebaseapp.com",
@@ -126,7 +147,7 @@
             storageBucket: "murugan-s-network.firebasestorage.app",
             messagingSenderId: "1053204994148",
             appId: "1:1053204994148:web:f74f31b7a58ab38ecb6771",
-            databaseURL: "https://murugan-s-network-default-rtdb.firebaseio.com/" // Update from Firebase Console
+            databaseURL: "https://murugan-s-network-default-rtdb.firebaseio.com" 
         };
 
         firebase.initializeApp(firebaseConfig);
@@ -134,17 +155,24 @@
         const auth = firebase.auth();
         const rtdb = firebase.database();
 
+        let currentUsername = "";
         let currentChatRoom = 'global';
         let chatUnsub = null;
 
-        // 1. AUTHENTICATION
-        auth.onAuthStateChanged(user => {
+        // 2. AUTH FLOW
+        auth.onAuthStateChanged(async (user) => {
             if (user) {
                 document.getElementById('loginOverlay').style.display = 'none';
-                setupPresence(user);
-                loadTasks();
-                loadChat('global');
-                listenOnline();
+                const userDoc = await db.collection('profiles').doc(user.uid).get();
+                
+                if (userDoc.exists) {
+                    currentUsername = userDoc.data().username;
+                    document.getElementById('navUsername').innerText = currentUsername;
+                    document.getElementById('usernameOverlay').style.display = 'none';
+                    initApp(user);
+                } else {
+                    document.getElementById('usernameOverlay').style.display = 'flex';
+                }
             } else {
                 document.getElementById('loginOverlay').style.display = 'flex';
             }
@@ -154,20 +182,54 @@
             const email = document.getElementById('emailIn').value;
             const pass = document.getElementById('passIn').value;
             try {
-                if(type === 'signup') await auth.createUserWithEmailAndPassword(email, pass);
-                if(type === 'login') await auth.signInWithEmailAndPassword(email, pass);
                 if(type === 'google') await auth.signInWithPopup(new firebase.auth.GoogleAuthProvider());
+                else {
+                    // Auto-signup logic: try login, if fails try signup
+                    try { await auth.signInWithEmailAndPassword(email, pass); }
+                    catch(e) { await auth.createUserWithEmailAndPassword(email, pass); }
+                }
             } catch(e) { alert(e.message); }
         }
 
-        // 2. ONLINE STATUS
+        // 3. USERNAME SYSTEM
+        async function checkUsernameAvailability(name) {
+            const hint = document.getElementById('usernameHint');
+            const btn = document.getElementById('finishSetupBtn');
+            const clean = name.trim().toLowerCase();
+            if(clean.length < 3) { hint.innerText = "Too short"; btn.disabled = true; return; }
+
+            const snap = await db.collection('profiles').where("username", "==", clean).get();
+            if(snap.empty) {
+                hint.innerText = "✓ Available"; hint.style.color = "green";
+                btn.disabled = false; btn.style.opacity = "1";
+            } else {
+                hint.innerText = `✖ Taken. Try ${clean}${Math.floor(Math.random()*99)}`; 
+                hint.style.color = "red"; btn.disabled = true;
+            }
+        }
+
+        async function finalizeUsername() {
+            const name = document.getElementById('newUsername').value.trim().toLowerCase();
+            await db.collection('profiles').doc(auth.currentUser.uid).set({
+                username: name, uid: auth.currentUser.uid
+            });
+            location.reload();
+        }
+
+        // 4. CHAT & PRESENCE
+        function initApp(user) {
+            setupPresence(user);
+            loadTasks();
+            loadChat('global');
+            listenOnline();
+        }
+
         function setupPresence(user) {
-            const name = user.displayName || user.email.split('@')[0];
-            const statusRef = rtdb.ref('/status/' + user.uid);
-            rtdb.ref('.info/connected').on('value', snap => {
-                if (!snap.val()) return;
-                statusRef.onDisconnect().set({ state: 'offline', name }).then(() => {
-                    statusRef.set({ state: 'online', name });
+            const ref = rtdb.ref('/status/' + user.uid);
+            rtdb.ref('.info/connected').on('value', s => {
+                if(!s.val()) return;
+                ref.onDisconnect().set({state:'offline', name: currentUsername}).then(() => {
+                    ref.set({state:'online', name: currentUsername});
                 });
             });
         }
@@ -185,22 +247,18 @@
             });
         }
 
-        // 3. CHAT (GLOBAL + PERSONAL)
         function loadChat(targetId, targetName) {
             if(chatUnsub) chatUnsub();
             const el = document.getElementById('chatMessages');
             const title = document.getElementById('chatTitle');
-            const back = document.getElementById('backToGlobal');
+            const back = document.getElementById('backBtn');
             el.innerHTML = "";
 
             if(targetId === 'global') {
-                currentChatRoom = 'global';
-                title.innerText = "GLOBAL CHAT";
-                back.style.display = "none";
+                currentChatRoom = 'global'; title.innerText = "GLOBAL CHAT"; back.style.display = "none";
             } else {
                 currentChatRoom = [auth.currentUser.uid, targetId].sort().join('_');
-                title.innerText = "CHAT: " + targetName.toUpperCase();
-                back.style.display = "block";
+                title.innerText = targetName.toUpperCase(); back.style.display = "block";
             }
 
             const col = (targetId === 'global') ? 'chats' : 'private_messages';
@@ -212,7 +270,7 @@
                     const d = doc.data();
                     const isMe = d.senderId === auth.currentUser.uid;
                     return `<div class="message-bubble ${isMe?'msg-me':'msg-them'}">
-                        <small style="font-size:0.6rem; opacity:0.8; display:block;">${d.senderName}</small>${d.message}</div>`;
+                        <small style="display:block; font-size:0.6rem; opacity:0.7;">${d.senderName}</small>${d.message}</div>`;
                 }).join('');
                 el.scrollTop = el.scrollHeight;
             });
@@ -223,34 +281,18 @@
             if(!input.value.trim()) return;
             const col = (currentChatRoom === 'global') ? 'chats' : 'private_messages';
             const data = {
-                senderId: auth.currentUser.uid,
-                senderName: auth.currentUser.displayName || auth.currentUser.email.split('@')[0],
-                message: input.value,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                senderId: auth.currentUser.uid, senderName: currentUsername,
+                message: input.value, timestamp: firebase.firestore.FieldValue.serverTimestamp()
             };
             if(currentChatRoom !== 'global') data.roomId = currentChatRoom;
             await db.collection(col).add(data);
             input.value = "";
         }
 
-        // 4. TASKS & TIMER UI
-        async function postTask() {
-            const val = document.getElementById('taskInput').value;
-            if(!val) return;
-            await db.collection('tasks').add({
-                username: auth.currentUser.email.split('@')[0],
-                message: val,
-                timestamp: firebase.firestore.FieldValue.serverTimestamp()
-            });
-            document.getElementById('taskInput').value = "";
-        }
-
-        function loadTasks() {
-            db.collection('tasks').orderBy("timestamp", "desc").onSnapshot(snap => {
-                document.getElementById('taskList').innerHTML = snap.docs.map(doc => `
-                    <div class="post-box"><b style="color:var(--primary)">@${doc.data().username}</b><br>${doc.data().message}</div>
-                `).join('');
-            });
+        // 5. HELPERS
+        function addEmoji(emoji) { 
+            const input = document.getElementById('chatInput');
+            input.value += emoji; input.focus(); 
         }
 
         function showSection(id) {
@@ -263,18 +305,22 @@
             win.style.display = (win.style.display === 'flex') ? 'none' : 'flex';
         }
 
-        // Simple Timer Logic
-        let timeLeft = 1500, timerInt = null;
-        function toggleTimer() {
-            if(timerInt) { clearInterval(timerInt); timerInt=null; }
-            else {
-                timerInt = setInterval(() => {
-                    timeLeft--;
-                    document.getElementById('mBox').innerText = Math.floor(timeLeft/60).toString().padStart(2,'0');
-                    document.getElementById('sBox').innerText = (timeLeft%60).toString().padStart(2,'0');
-                    if(timeLeft <= 0) clearInterval(timerInt);
-                }, 1000);
-            }
+        async function postTask() {
+            const val = document.getElementById('taskInput').value;
+            if(!val) return;
+            await db.collection('tasks').add({
+                username: currentUsername, message: val, timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            });
+            document.getElementById('taskInput').value = "";
+        }
+
+        function loadTasks() {
+            db.collection('tasks').orderBy("timestamp", "desc").onSnapshot(snap => {
+                document.getElementById('taskList').innerHTML = snap.docs.map(doc => `
+                    <div style="background:rgba(255,255,255,0.1); padding:15px; border-radius:15px; margin-bottom:10px; border-left:5px solid var(--primary);">
+                        <b style="color:var(--primary)">@${doc.data().username}</b><br>${doc.data().message}
+                    </div>`).join('');
+            });
         }
     </script>
 </body>
