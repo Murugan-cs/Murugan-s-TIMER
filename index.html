@@ -3,122 +3,141 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maintenance | Murugan Network</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;600;800&display=swap" rel="stylesheet">
+    <title>SYSTEM OFFLINE | MURUGAN</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;900&family=Space+Mono&display=swap');
+
         :root {
             --primary: #ff416c;
             --accent: #00f2fe;
-            --dark: #1A1A2E;
+            --dark: #0a0a12;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Poppins', sans-serif;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: radial-gradient(circle at center, #1A1A2E 0%, #0f0c29 100%);
+            background-color: var(--dark);
+            color: white;
+            font-family: 'Orbitron', sans-serif;
             height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
             overflow: hidden;
         }
 
-        .container {
+        /* Animated Background Grid */
+        .grid {
+            position: absolute;
+            inset: 0;
+            background-image: 
+                linear-gradient(to right, rgba(255, 65, 108, 0.05) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(0, 242, 254, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            transform: perspective(500px) rotateX(45deg);
+            transform-origin: center;
+            animation: moveGrid 10s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes moveGrid {
+            from { background-position: 0 0; }
+            to { background-position: 0 500px; }
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
             text-align: center;
             padding: 20px;
-            z-index: 10;
         }
 
-        /* The Gear Icon Animation */
-        .icon-box {
-            margin-bottom: 30px;
-            position: relative;
-            display: inline-block;
-        }
-
-        .gear {
-            fill: var(--primary);
-            animation: rotate 4s linear infinite;
-        }
-
-        @keyframes rotate {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
+        /* Glitch Effect Title */
         h1 {
-            font-size: clamp(2rem, 8vw, 4rem);
-            font-weight: 800;
-            letter-spacing: -1px;
-            background: linear-gradient(to right, #fff, var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-        }
-
-        p {
-            font-size: 1.1rem;
-            color: rgba(255, 255, 255, 0.7);
-            max-width: 500px;
-            margin: 0 auto;
-            line-height: 1.6;
-        }
-
-        .status-pill {
-            display: inline-block;
-            margin-top: 30px;
-            padding: 8px 20px;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid var(--primary);
-            border-radius: 50px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            font-size: clamp(3rem, 10vw, 6rem);
+            font-weight: 900;
             text-transform: uppercase;
-            letter-spacing: 2px;
-            color: var(--primary);
-            animation: pulse 2s infinite;
+            letter-spacing: 5px;
+            position: relative;
+            color: white;
+            text-shadow: 2px 2px var(--primary), -2px -2px var(--accent);
+            animation: glitch 1s infinite;
         }
 
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 65, 108, 0.4); }
-            70% { box-shadow: 0 0 0 15px rgba(255, 65, 108, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 65, 108, 0); }
+        @keyframes glitch {
+            0% { transform: translate(0); }
+            20% { transform: translate(-3px, 3px); }
+            40% { transform: translate(-3px, -3px); }
+            60% { transform: translate(3px, 3px); }
+            80% { transform: translate(3px, -3px); }
+            100% { transform: translate(0); }
         }
 
-        /* Background Glow Decor */
-        .glow {
+        /* Terminal Text */
+        .status-box {
+            font-family: 'Space Mono', monospace;
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid var(--accent);
+            padding: 20px;
+            border-radius: 5px;
+            margin-top: 30px;
+            display: inline-block;
+            text-align: left;
+            box-shadow: 0 0 20px rgba(0, 242, 254, 0.2);
+        }
+
+        .line {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+            color: var(--accent);
+        }
+
+        .line::before { content: "> "; color: var(--primary); }
+
+        .cursor {
+            display: inline-block;
+            width: 10px;
+            height: 1.2rem;
+            background: var(--accent);
+            animation: blink 0.8s infinite;
+            vertical-align: middle;
+        }
+
+        @keyframes blink { 50% { opacity: 0; } }
+
+        /* Floating Neon Circles */
+        .circle {
             position: absolute;
-            width: 300px;
-            height: 300px;
-            background: var(--primary);
-            filter: blur(150px);
-            opacity: 0.2;
             border-radius: 50%;
-            z-index: 1;
+            background: var(--primary);
+            filter: blur(80px);
+            opacity: 0.3;
+            z-index: 2;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-20px) scale(1.1); }
         }
     </style>
 </head>
 <body>
 
-    <div class="glow" style="top: 10%; left: 10%;"></div>
-    <div class="glow" style="bottom: 10%; right: 10%;"></div>
+    <div class="grid"></div>
+    <div class="circle" style="width: 300px; height: 300px; top: -100px; right: -50px; background: var(--accent);"></div>
+    <div class="circle" style="width: 250px; height: 250px; bottom: -50px; left: -50px;"></div>
 
-    <div class="container">
-        <div class="icon-box">
-            <svg class="gear" width="80" height="80" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
-                <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1Z"/>
-            </svg>
+    <div class="content">
+        <h1>OFFLINE</h1>
+        <div class="status-box">
+            <span class="line">Initializing database upgrade...</span>
+            <span class="line">Deploying new security protocols...</span>
+            <span class="line">Syncing unique usernames...</span>
+            <span class="line">Status: <span style="color: #00ff00;">MAINTENANCE_MODE</span></span>
+            <span class="line">Estimated return: SOON <span class="cursor"></span></span>
         </div>
-        <h1>Under Maintenance</h1>
-        <p>Murugan Network is upgrading. We are currently configuring the login system to make your experience more secure. See you shortly!</p>
-        <div class="status-pill">Upgrading Database</div>
     </div>
 
 </body>
