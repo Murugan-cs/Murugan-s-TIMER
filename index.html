@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Murugan | Perfected Edition</title>
+    <title>Murugan | Global Launch Countdown</title>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Space+Grotesk:wght@300;500&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -83,7 +83,6 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* --- FIXED TYPEWRITER LOGIC --- */
         .typewriter-box {
             margin-bottom: 40px;
             display: flex;
@@ -100,25 +99,15 @@
             border-right: 3px solid var(--accent);
             white-space: nowrap;
             width: 0; 
-            max-width: max-content; /* Critical fix */
+            max-width: max-content;
         }
 
         .active-typing {
-            animation: 
-                typing 3.5s steps(25, end) forwards, 
-                blink 0.8s step-end infinite;
+            animation: typing 3.5s steps(25, end) forwards, blink 0.8s step-end infinite;
         }
 
-        @keyframes typing { 
-            from { width: 0; } 
-            to { width: 100%; } 
-        }
-
-        @keyframes blink { 
-            from, to { border-color: transparent; } 
-            50% { border-color: var(--accent); } 
-        }
-        /* ------------------------------ */
+        @keyframes typing { from { width: 0; } to { width: 100%; } }
+        @keyframes blink { from, to { border-color: transparent; } 50% { border-color: var(--accent); } }
 
         .timer-row {
             display: grid;
@@ -171,11 +160,6 @@
             box-shadow: 0 0 15px var(--accent);
             transition: width 1s linear;
         }
-
-        @media (max-width: 480px) {
-            .brand-name { letter-spacing: 0.4rem; }
-            .typewriter-text { letter-spacing: 2px; }
-        }
     </style>
 </head>
 <body>
@@ -183,7 +167,7 @@
     <div class="stars-bg"></div>
 
     <div id="entrance-layer">
-        <button class="entrance-btn" onclick="launchExperience()">Enter Space</button>
+        <button class="entrance-btn" onclick="launchExperience()">Discover Murugan</button>
     </div>
 
     <div class="container" id="main-ui">
@@ -210,45 +194,57 @@
     </audio>
 
     <script>
-        const totalDuration = 5 * 24 * 60 * 60 * 1000;
-        const targetDate = new Date().getTime() + totalDuration;
+        /** * EDIT YOUR RELEASE DATE HERE 
+         * Format: "Month Day, Year Hours:Minutes:Seconds"
+        **/
+        const releaseDate = new Date("December 30, 2025 00:00:00").getTime();
+        
+        // This date is used ONLY to calculate the % on the progress bar (e.g., from today)
+        const projectStartDate = new Date("December 24, 2025 00:00:00").getTime();
 
         function launchExperience() {
             const audio = document.getElementById('bg-audio');
             audio.volume = 0.4;
             audio.play().catch(() => {});
 
-            const gate = document.getElementById('entrance-layer');
-            gate.style.opacity = '0';
+            document.getElementById('entrance-layer').style.opacity = '0';
             setTimeout(() => {
-                gate.style.visibility = 'hidden';
-                const ui = document.getElementById('main-ui');
-                ui.style.opacity = '1';
-                ui.style.transform = 'translateY(0)';
+                document.getElementById('entrance-layer').style.visibility = 'hidden';
+                document.getElementById('main-ui').style.opacity = '1';
+                document.getElementById('main-ui').style.transform = 'translateY(0)';
                 document.getElementById('typewriter').classList.add('active-typing');
             }, 800);
 
-            setInterval(update, 1000);
-            update();
+            // Update every second
+            setInterval(updateTimer, 1000);
+            updateTimer();
         }
 
-        function update() {
+        function updateTimer() {
             const now = new Date().getTime();
-            const gap = targetDate - now;
+            const distance = releaseDate - now;
 
-            const days = Math.floor(gap / 86400000);
-            const hours = Math.floor((gap % 86400000) / 3600000);
-            const mins = Math.floor((gap % 3600000) / 60000);
-            const secs = Math.floor((gap % 60000) / 1000);
+            // Calculate time units
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            document.getElementById('d').innerText = days.toString().padStart(2, '0');
-            document.getElementById('h').innerText = hours.toString().padStart(2, '0');
-            document.getElementById('m').innerText = mins.toString().padStart(2, '0');
-            document.getElementById('s').innerText = secs.toString().padStart(2, '0');
+            // Display results
+            if (distance < 0) {
+                document.getElementById('main-ui').innerHTML = "<h1 class='brand-name'>RELEASED</h1>";
+            } else {
+                document.getElementById('d').innerText = days.toString().padStart(2, '0');
+                document.getElementById('h').innerText = hours.toString().padStart(2, '0');
+                document.getElementById('m').innerText = minutes.toString().padStart(2, '0');
+                document.getElementById('s').innerText = seconds.toString().padStart(2, '0');
 
-            const elapsed = totalDuration - gap;
-            const progressPercent = (elapsed / totalDuration) * 100;
-            document.getElementById('bar').style.width = Math.min(Math.max(progressPercent, 0), 100) + "%";
+                // Progress Bar Logic
+                const totalTime = releaseDate - projectStartDate;
+                const elapsed = now - projectStartDate;
+                const progressPercent = (elapsed / totalTime) * 100;
+                document.getElementById('bar').style.width = Math.min(Math.max(progressPercent, 0), 100) + "%";
+            }
         }
     </script>
 </body>
