@@ -3,132 +3,241 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Murugan | Under Maintenance</title>
+    <title>Murugan | The Experience</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Space+Grotesk:wght@300;500&display=swap" rel="stylesheet">
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        :root {
+            --bg: #02040a;
+            --accent: #00f2ff;
+            --text: #ffffff;
+            --glass: rgba(255, 255, 255, 0.03);
         }
 
-        body, html {
-            height: 100%;
-            width: 100%;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Space Grotesk', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             overflow: hidden;
-            font-family: 'Arial', sans-serif;
-            background-color: #1a1a1a; /* Dark fallback */
         }
 
-        /* Slideshow Container */
-        #bg-container {
+        /* Ambient Stars Background */
+        .stars-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, #0a162b 0%, #02040a 100%);
             z-index: -1;
         }
 
-        .slide {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
-            background-position: center;
-            opacity: 0;
-            transition: opacity 2s ease-in-out;
-            filter: brightness(0.5); /* Makes text pop */
-        }
-
-        .active {
-            opacity: 1;
-        }
-
-        /* Content Styling */
-        .content {
-            height: 100vh;
+        /* Sophisticated Entrance Layer */
+        #entrance-layer {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg);
+            z-index: 100;
             display: flex;
-            flex-direction: column;
             justify-content: center;
             align-items: center;
+            transition: all 1.8s cubic-bezier(0.19, 1, 0.22, 1);
+        }
+
+        .entrance-btn {
+            background: transparent;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 20px 40px;
+            letter-spacing: 10px;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: 0.5s;
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.1);
+        }
+
+        .entrance-btn:hover {
+            background: var(--accent);
+            color: #000;
+            box-shadow: 0 0 50px rgba(0, 242, 255, 0.4);
+        }
+
+        /* Main UI */
+        .container {
             text-align: center;
-            color: #ffffff;
-            padding: 20px;
+            opacity: 0;
+            transform: scale(1.05);
+            transition: all 2.5s ease;
+            width: 90%;
+            max-width: 800px;
         }
 
-        h1 {
-            font-size: clamp(3rem, 10vw, 6rem); /* Big and Bold */
-            font-weight: 900;
+        .brand-name {
+            font-family: 'Cinzel', serif;
+            font-size: clamp(3rem, 12vw, 7rem);
+            letter-spacing: 1.2rem;
+            margin-bottom: 5px;
+            background: linear-gradient(to bottom, #fff 40%, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 30px rgba(255,255,255,0.1));
+        }
+
+        .typewriter-box {
+            height: 25px;
+            margin-bottom: 60px;
+        }
+
+        .typewriter-text {
+            font-size: 0.75rem;
+            letter-spacing: 8px;
+            color: var(--accent);
             text-transform: uppercase;
-            letter-spacing: 12px;
-            margin-bottom: 15px;
-            opacity: 0;
-            animation: dropFade 1.2s ease-out forwards;
+            overflow: hidden;
+            border-right: 2px solid var(--accent);
+            white-space: nowrap;
+            margin: 0 auto;
+            width: 0;
         }
 
-        p {
-            font-size: clamp(1rem, 4vw, 1.5rem);
-            font-weight: 300;
-            letter-spacing: 2px;
-            margin-bottom: 40px;
-            opacity: 0;
-            animation: slideInLeft 1s ease-out 0.8s forwards;
+        /* Timer Cards */
+        .timer-row {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-bottom: 50px;
         }
 
-        .footer-name {
-            font-size: 1.2rem;
-            font-weight: bold;
-            letter-spacing: 6px;
-            text-transform: uppercase;
-            opacity: 0;
-            padding-top: 20px;
-            border-top: 2px solid rgba(255,255,255,0.3);
-            animation: growIn 1s ease-out 1.5s forwards;
+        .unit {
+            flex: 1;
+            max-width: 120px;
+            padding: 25px 10px;
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 4px;
+            backdrop-filter: blur(10px);
+        }
+
+        .num { font-size: clamp(1.5rem, 5vw, 3rem); font-weight: 300; display: block; }
+        .label { font-size: 0.55rem; color: rgba(255,255,255,0.3); text-transform: uppercase; letter-spacing: 3px; margin-top: 5px; }
+
+        /* Sleek Progress Line */
+        .progress-container {
+            width: 100%;
+            max-width: 540px;
+            height: 1px;
+            background: rgba(255,255,255,0.1);
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 0; left: 0;
+            height: 100%;
+            width: 0%;
+            background: var(--accent);
+            box-shadow: 0 0 15px var(--accent);
+            transition: width 1s linear;
         }
 
         /* Animations */
-        @keyframes dropFade {
-            0% { transform: translateY(-40px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
+        .active-typing {
+            animation: typing 4s steps(40, end) forwards, blink 0.8s infinite;
         }
 
-        @keyframes slideInLeft {
-            0% { transform: translateX(-50px); opacity: 0; }
-            100% { transform: translateX(0); opacity: 1; }
-        }
+        @keyframes typing { from { width: 0 } to { width: 280px } }
+        @keyframes blink { 50% { border-color: transparent } }
 
-        @keyframes growIn {
-            0% { transform: scale(0.8); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
+        @media (max-width: 500px) {
+            .timer-row { gap: 10px; }
+            .brand-name { letter-spacing: 0.5rem; }
         }
     </style>
 </head>
 <body>
 
-    <div id="bg-container">
-        <div class="slide active" style="background-image: url('https://source.unsplash.com/1920x1080/?nature,forest')"></div>
-        <div class="slide" style="background-image: url('https://source.unsplash.com/1920x1080/?mountain,calm')"></div>
-        <div class="slide" style="background-image: url('https://source.unsplash.com/1920x1080/?ocean,peaceful')"></div>
+    <div class="stars-bg"></div>
+
+    <div id="entrance-layer">
+        <button class="entrance-btn" onclick="launchExperience()">Enter Space</button>
     </div>
 
-    <div class="content">
-        <h1>UNDER MAINTENANCE</h1>
-        <p>We are deeply sorry for the inconvenience, we'll be back soon.</p>
-        <div class="footer-name">BY MURUGAN</div>
+    <div class="container" id="main-ui">
+        <h1 class="brand-name">MURUGAN</h1>
+        
+        <div class="typewriter-box">
+            <div id="typewriter" class="typewriter-text">New Project Loading...</div>
+        </div>
+
+        <div class="timer-row">
+            <div class="unit"><span class="num" id="d">00</span><span class="label">Days</span></div>
+            <div class="unit"><span class="num" id="h">00</span><span class="label">Hrs</span></div>
+            <div class="unit"><span class="num" id="m">00</span><span class="label">Min</span></div>
+            <div class="unit"><span class="num" id="s">00</span><span class="label">Sec</span></div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-line" id="bar"></div>
+        </div>
     </div>
+
+    <audio id="bg-audio" loop>
+        <source src="https://www.bensound.com/bensound-music/bensound-slowmotion.mp3" type="audio/mpeg">
+    </audio>
 
     <script>
-        const slides = document.querySelectorAll('.slide');
-        let index = 0;
+        // Setup: 5 days countdown
+        const totalDuration = 5 * 24 * 60 * 60 * 1000;
+        const targetDate = new Date().getTime() + totalDuration;
 
-        function changeBackground() {
-            slides[index].classList.remove('active');
-            index = (index + 1) % slides.length;
-            slides[index].classList.add('active');
+        function launchExperience() {
+            // Start Audio
+            const audio = document.getElementById('bg-audio');
+            audio.volume = 0.4;
+            audio.play();
+
+            // Transition UI
+            document.getElementById('entrance-layer').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('entrance-layer').style.display = 'none';
+                const ui = document.getElementById('main-ui');
+                ui.style.opacity = '1';
+                ui.style.transform = 'scale(1)';
+                
+                // Start Typewriter
+                document.getElementById('typewriter').classList.add('active-typing');
+            }, 1000);
+
+            // Start Timer Logic
+            setInterval(update, 1000);
+            update();
         }
 
-        // Change every 6 seconds for a calm feel
-        setInterval(changeBackground, 6000);
+        function update() {
+            const now = new Date().getTime();
+            const gap = targetDate - now;
+
+            const days = Math.floor(gap / 86400000);
+            const hours = Math.floor((gap % 86400000) / 3600000);
+            const mins = Math.floor((gap % 3600000) / 60000);
+            const secs = Math.floor((gap % 60000) / 1000);
+
+            document.getElementById('d').innerText = days.toString().padStart(2, '0');
+            document.getElementById('h').innerText = hours.toString().padStart(2, '0');
+            document.getElementById('m').innerText = mins.toString().padStart(2, '0');
+            document.getElementById('s').innerText = secs.toString().padStart(2, '0');
+
+            // Line Progress Calculation
+            const elapsed = totalDuration - gap;
+            const progressPercent = (elapsed / totalDuration) * 100;
+            document.getElementById('bar').style.width = Math.min(Math.max(progressPercent, 0), 100) + "%";
+        }
     </script>
 </body>
 </html>
